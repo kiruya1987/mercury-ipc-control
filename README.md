@@ -4,6 +4,7 @@ install packages `rsa` and `requests`
 ```bash
 pip install requests
 pip install rsa
+pip install asn1crypto
 # or
 python2 -m pip install requests
 python2 -m pip install requests
