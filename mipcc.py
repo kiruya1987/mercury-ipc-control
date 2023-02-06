@@ -61,16 +61,23 @@ def tp_encrypt(password):
 # ref https://www.cnblogs.com/masako/p/7660418.html
 def convert_rsa_key(s):
     b_str = base64.b64decode(s)
-    if len(b_str) < 162:
-        return False
-    hex_str = b_str.hex()
-    m_start = 29 * 2
-    e_start = 159 * 2
-    m_len = 128 * 2
-    e_len = 3 * 2
-    modulus = hex_str[m_start:m_start + m_len]
-    exponent = hex_str[e_start:e_start + e_len]
-    return modulus, exponent
+    from asn1crypto.keys import PublicKeyInfo
+    import binascii
+    public_key = PublicKeyInfo.load(b_str)["public_key"].parsed
+    return binascii.hexlify(public_key["modulus"].contents), binascii.hexlify(public_key["public_exponent"].contents)
+
+# def convert_rsa_key(s):
+#     b_str = base64.b64decode(s)
+#     if len(b_str) < 162:
+#         return False
+#     hex_str = b_str.hex()
+#     m_start = 29 * 2
+#     e_start = 159 * 2
+#     m_len = 128 * 2
+#     e_len = 3 * 2
+#     modulus = hex_str[m_start:m_start + m_len]
+#     exponent = hex_str[e_start:e_start + e_len]
+#     return modulus, exponent
 
 
 def rsa_encrypt(string, pubkey):
